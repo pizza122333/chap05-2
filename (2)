@@ -4,20 +4,20 @@
 using namespace std;
 using namespace cv;
 
-// ÇÔ¼ö ¼±¾ğ
+// í•¨ìˆ˜ ì„ ì–¸
 void contrast_effective_direct_access();
 
 int main(void)
 {
-    // main ÇÔ¼ö¸¦ °¡Àå Ã³À½¿¡ ¹èÄ¡
+    // main í•¨ìˆ˜ë¥¼ ê°€ì¥ ì²˜ìŒì— ë°°ì¹˜
     contrast_effective_direct_access();
     return 0;
 }
 
-// ÇÔ¼ö Á¤ÀÇ
+// í•¨ìˆ˜ ì •ì˜
 void contrast_effective_direct_access()
 {
-    // 1. ¿µ»ó ºÒ·¯¿À±â (±×·¹ÀÌ½ºÄÉÀÏ)
+    // 1. ì˜ìƒ ë¶ˆëŸ¬ì˜¤ê¸° (ê·¸ë ˆì´ìŠ¤ì¼€ì¼)
     Mat src = imread("lenna.bmp", IMREAD_GRAYSCALE);
 
     if (src.empty()) {
@@ -25,24 +25,24 @@ void contrast_effective_direct_access()
         return;
     }
 
-    // 2. °á°ú ¿µ»ó »ı¼º
+    // 2. ê²°ê³¼ ì˜ìƒ ìƒì„±
     Mat dst(src.rows, src.cols, src.type());
 
-    float alpha = 1.0f; // ¸í¾Ïºñ Á¶Àı °¡ÁßÄ¡
+    float alpha = 1.0f; // ëª…ì•”ë¹„ ì¡°ì ˆ ê°€ì¤‘ì¹˜
 
-    // 3. ÇÈ¼¿ Á÷Á¢ ÂüÁ¶ ¹æ½ÄÀ» ÀÌ¿ëÇÑ È¿°úÀûÀÎ ¸í¾Ïºñ ¿¬»ê
+    // 3. í”½ì…€ ì§ì ‘ ì°¸ì¡° ë°©ì‹ì„ ì´ìš©í•œ íš¨ê³¼ì ì¸ ëª…ì•”ë¹„ ì—°ì‚°
     for (int j = 0; j < src.rows; j++) {
         for (int i = 0; i < src.cols; i++) {
-            // ¿øº» ÇÈ¼¿ °ª °¡Á®¿À±â
+            // ì›ë³¸ í”½ì…€ ê°’ ê°€ì ¸ì˜¤ê¸°
             int v = src.at<uchar>(j, i);
 
-            // ÄÚµå 5-6ÀÇ ¼ö½Ä: dst = src + (src - 128) * alpha
-            // °è»ê °úÁ¤¿¡¼­ ¼Ò¼öÁ¡ÀÌ ¹ß»ıÇÏ¹Ç·Î float ¿¬»ê ÈÄ saturate_cast Àû¿ë
+            // ì½”ë“œ 5-6ì˜ ìˆ˜ì‹: dst = src + (src - 128) * alpha
+            // ê³„ì‚° ê³¼ì •ì—ì„œ ì†Œìˆ˜ì ì´ ë°œìƒí•˜ë¯€ë¡œ float ì—°ì‚° í›„ saturate_cast ì ìš©
             dst.at<uchar>(j, i) = saturate_cast<uchar>(v + (v - 128) * alpha);
         }
     }
 
-    // 4. °á°ú Ãâ·Â
+    // 4. ê²°ê³¼ ì¶œë ¥
     imshow("src", src);
     imshow("dst", dst);
 
