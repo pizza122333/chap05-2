@@ -1,0 +1,51 @@
+#include <iostream>
+#include "opencv2/opencv.hpp"
+
+using namespace std;
+using namespace cv;
+
+// 함수 선언
+void contrast_effective_direct_access();
+
+int main(void)
+{
+    // main 함수를 가장 처음에 배치
+    contrast_effective_direct_access();
+    return 0;
+}
+
+// 함수 정의
+void contrast_effective_direct_access()
+{
+    // 1. 영상 불러오기 (그레이스케일)
+    Mat src = imread("lenna.bmp", IMREAD_GRAYSCALE);
+
+    if (src.empty()) {
+        cerr << "Image load failed!" << endl;
+        return;
+    }
+
+    // 2. 결과 영상 생성
+    Mat dst(src.rows, src.cols, src.type());
+
+    float alpha = 1.0f; // 명암비 조절 가중치
+
+    // 3. 픽셀 직접 참조 방식을 이용한 효과적인 명암비 연산
+    for (int j = 0; j < src.rows; j++) {
+        for (int i = 0; i < src.cols; i++) {
+            // 원본 픽셀 값 가져오기
+            int v = src.at<uchar>(j, i);
+
+            // 코드 5-6의 수식: dst = src + (src - 128) * alpha
+            // 계산 과정에서 소수점이 발생하므로 float 연산 후 saturate_cast 적용
+            dst.at<uchar>(j, i) = saturate_cast<uchar>(v + (v - 128) * alpha);
+        }
+    }
+
+    // 4. 결과 출력
+    imshow("src", src);
+    imshow("dst", dst);
+
+    waitKey();
+    destroyAllWindows();
+}
